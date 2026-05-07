@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kazuhiko Yonekura</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --black: #0f0f0f;
+      --gray: #555;
+      --light: #aaa;
+      --border: #e5e5e5;
+      --bg: #fff;
+      --paper: #fafafa;
+      --accent: #2563eb;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 400;
+      color: var(--black);
+      background: var(--bg);
+      line-height: 1.6;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(14px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* LANG TRANSITION */
+    body.lang-switching * { transition: none !important; }
+    [data-en], [data-ja] { transition: opacity 0.25s ease; }
+
+    /* NAV */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      background: rgba(255,255,255,0.95);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 3rem;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      animation: fadeIn 0.5s ease both;
+    }
+
+    .nav-left { display: flex; align-items: center; gap: 1.5rem; }
+
+    .nav-name {
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--black);
+      letter-spacing: 0.01em;
+      text-decoration: none;
+      transition: opacity 0.2s;
+    }
+    .nav-name:hover { opacity: 0.6; }
+
+    /* LANG TOGGLE */
+    .lang-toggle {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 0.22rem 0.65rem;
+      font-size: 0.72rem;
+      font-weight: 500;
+      color: var(--gray);
+      cursor: pointer;
+      transition: border-color 0.2s, color 0.2s;
+      font-family: inherit;
+      letter-spacing: 0.05em;
+    }
+    .lang-toggle:hover { border-color: var(--black); color: var(--black); }
+    .lang-toggle .lang-icon { font-size: 0.85rem; }
+
+    .nav-links { display: flex; list-style: none; align-items: center; }
+
+    .nav-links li { text-align: center; }
+
+    .nav-links li:not(:last-child) { width: 7rem; }
+
+    .nav-links a {
+      color: var(--gray);
+      text-decoration: none;
+      font-size: 0.82rem;
+      transition: color 0.2s;
+      position: relative;
+      display: block;
+      text-align: center;
+      white-space: nowrap;
+    }
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -3px; left: 0; right: 0;
+      height: 1px;
+      background: var(--black);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.2s ease;
+    }
+    .nav-links a:hover { color: var(--black); }
+    .nav-links a:hover::after { transform: scaleX(1); }
+
+    /* HERO */
+    .hero {
+      padding: 10rem 3rem 6rem;
+      max-width: 780px;
+      margin: 0 auto;
+    }
+
+    .hero-name {
+      font-family: 'EB Garamond', serif;
+      font-size: clamp(2.4rem, 5vw, 4rem);
+      font-weight: 400;
+      line-height: 1.1;
+      margin-bottom: 1.25rem;
+      color: var(--black);
+      animation: fadeUp 0.75s 0.1s ease both;
+    }
+
+    .hero-tagline {
+      font-size: 1rem;
+      color: var(--gray);
+      max-width: 460px;
+      line-height: 1.7;
+      margin-bottom: 2rem;
+      font-weight: 300;
+      animation: fadeUp 0.75s 0.25s ease both;
+    }
+
+    .hero-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 2.5rem;
+      animation: fadeUp 0.75s 0.4s ease both;
+    }
+
+    .tag {
+      font-size: 0.73rem;
+      color: var(--gray);
+      border: 1px solid var(--border);
+      padding: 0.28rem 0.75rem;
+      border-radius: 999px;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .tag:hover { border-color: var(--black); color: var(--black); }
+
+    .hero-links {
+      display: flex;
+      gap: 1.25rem;
+      flex-wrap: wrap;
+      animation: fadeUp 0.75s 0.55s ease both;
+    }
+
+    .hero-link {
+      font-size: 0.82rem;
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 500;
+      position: relative;
+      transition: opacity 0.2s;
+    }
+    .hero-link::after {
+      content: '';
+      position: absolute;
+      bottom: -2px; left: 0; right: 0;
+      height: 1px;
+      background: var(--accent);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.2s ease;
+    }
+    .hero-link:hover { opacity: 1; }
+    .hero-link:hover::after { transform: scaleX(1); }
+
+    /* SECTION */
+    section { border-top: 1px solid var(--border); padding: 4rem 3rem; }
+    .section-inner { max-width: 780px; margin: 0 auto; }
+
+    .section-label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--light);
+      font-weight: 500;
+      margin-bottom: 2rem;
+    }
+
+    /* ABOUT */
+    .about-text p {
+      font-size: 0.97rem;
+      color: var(--gray);
+      line-height: 1.8;
+      margin-bottom: 1rem;
+      max-width: 580px;
+      text-align: center;
+    }
+    .about-text { display: flex; flex-direction: column; align-items: center; }
+
+    /* EDUCATION */
+    .edu-list { display: flex; flex-direction: column; gap: 1.75rem; }
+
+    .edu-item { display: grid; grid-template-columns: 1fr auto; gap: 0.5rem; align-items: baseline; transition: transform 0.2s ease; cursor: default; }
+    .edu-item:hover { transform: translateX(4px); }
+
+    .edu-degree { font-family: 'EB Garamond', serif; font-size: 1.1rem; color: var(--black); }
+    .edu-school { font-size: 0.83rem; color: var(--gray); margin-top: 0.15rem; }
+    .edu-date { font-size: 0.78rem; color: var(--light); text-align: right; white-space: nowrap; }
+
+    /* PROJECTS */
+    .exp-list { display: flex; flex-direction: column; gap: 2rem; }
+    .exp-item { display: grid; grid-template-columns: 1fr auto; gap: 0.5rem; align-items: start; transition: transform 0.2s ease; cursor: default; }
+    .exp-item:hover { transform: translateX(4px); }
+
+    .exp-role { font-family: 'EB Garamond', serif; font-size: 1.1rem; color: var(--black); margin-bottom: 0.15rem; }
+    .exp-org { font-size: 0.83rem; color: var(--gray); margin-bottom: 0.5rem; }
+    .exp-desc { font-size: 0.88rem; color: var(--gray); line-height: 1.7; max-width: 520px; }
+    .proj-link {
+      display: inline-block;
+      margin-top: 0.6rem;
+      font-size: 0.8rem;
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 500;
+      transition: opacity 0.15s;
+    }
+    .proj-link:hover { opacity: 0.7; }
+    .exp-date { font-size: 0.78rem; color: var(--light); text-align: right; white-space: nowrap; margin-top: 0.3rem; }
+
+    /* SKILLS */
+    .skills-row { display: flex; flex-direction: column; gap: 1.25rem; }
+    .skill-row { display: flex; gap: 1rem; align-items: baseline; }
+    .skill-cat {
+      font-size: 0.75rem;
+      color: var(--light);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      font-weight: 500;
+      width: 9rem;
+      flex-shrink: 0;
+    }
+    .skill-vals { font-size: 0.88rem; color: var(--gray); line-height: 1.6; }
+
+    /* CONTACT */
+    #contact { background: var(--paper); }
+    .contact-list { display: flex; flex-direction: column; gap: 1rem; }
+    .contact-row { display: flex; gap: 1.5rem; align-items: baseline; }
+    .contact-cat {
+      font-size: 0.75rem;
+      color: var(--light);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      font-weight: 500;
+      width: 5rem;
+      flex-shrink: 0;
+    }
+    .contact-val { font-size: 0.9rem; color: var(--gray); text-decoration: none; transition: color 0.15s; }
+    a.contact-val:hover { color: var(--accent); }
+
+    /* FOOTER */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 1.5rem 3rem;
+      font-size: 0.75rem;
+      color: var(--light);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    footer a { color: inherit; text-decoration: none; }
+
+    @media (max-width: 640px) {
+      nav { padding: 0 1.25rem; }
+      .nav-links { display: none; }
+      .hero { padding: 7rem 1.25rem 4rem; }
+      section { padding: 3rem 1.25rem; }
+      .edu-item, .exp-item { grid-template-columns: 1fr; }
+      .edu-date, .exp-date { text-align: left; }
+      .skill-row { flex-direction: column; gap: 0.25rem; }
+      .skill-cat { width: auto; }
+      .contact-row { flex-direction: column; gap: 0.2rem; }
+      footer { padding: 1.25rem; flex-direction: column; gap: 0.5rem; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <ul class="nav-links">
+      <li><a href="#about" data-en="About" data-ja="自己紹介">About</a></li>
+      <li><a href="#education" data-en="Education" data-ja="学歴">Education</a></li>
+      <li><a href="#experience" data-en="Projects" data-ja="プロジェクト">Projects</a></li>
+      <li><a href="#skills" data-en="Skills" data-ja="スキル">Skills</a></li>
+      <li><a href="#contact" data-en="Contact" data-ja="連絡先">Contact</a></li>
+      <li>
+        <button class="lang-toggle" id="langToggle" onclick="toggleLang()">
+          <span class="lang-icon">🌐</span>
+          <span id="langLabel">日本語</span>
+        </button>
+      </li>
+    </ul>
+  </nav>
+
+  <div class="hero">
+    <h1 class="hero-name" data-en="Kazuhiko Yonekura" data-ja="米倉 和彦">Kazuhiko Yonekura</h1>
+    <p class="hero-tagline"
+      data-en="Dual-degree candidate in Finance and Computer Science with CFA Level I and USCPA in progress."
+      data-ja="ファイナンスとコンピューターサイエンスのダブルディグリー取得中。CFA Level I合格、USCPA取得に向けて勉強中。">
+      Dual-degree candidate in Finance and Computer Science with CFA Level I and USCPA in progress.
+    </p>
+    <div class="hero-tags">
+      <span class="tag" data-en="CFA Level I Passed" data-ja="CFA Level I 合格">CFA Level I Passed</span>
+      <span class="tag" data-en="USCPA Candidate" data-ja="USCPA 取得中">USCPA Candidate</span>
+      <span class="tag" data-en="B.Sc Computer Science · B.Com Finance" data-ja="B.Sc Computer Science · B.Com Finance">B.Sc Computer Science · B.Com Finance</span>
+      <span class="tag" data-en="English · Japanese" data-ja="英語・日本語">English · Japanese</span>
+    </div>
+    <div class="hero-links">
+      <a href="#contact" class="hero-link" data-en="Contact →" data-ja="連絡先 →">Contact →</a>
+      <a href="https://www.linkedin.com/in/kazuhiko-yonekura-6377053b9" target="_blank" class="hero-link">LinkedIn →</a>
+    </div>
+  </div>
+
+  <section id="about">
+    <div class="section-inner" style="text-align:center;">
+      <p class="section-label reveal" style="justify-content:center;" data-en="About" data-ja="自己紹介">About</p>
+      <div class="about-text reveal">
+        <p data-en="I grew up in Tokyo and have lived and studied across multiple countries since my late teens — an experience that shaped a strong sense of adaptability, cross-cultural fluency, and intellectual curiosity."
+           data-ja="東京で育ち、10代後半から複数の国で生活・学習してきました。この経験が、高い適応力、異文化対応力、そして知的好奇心の礎となっています。">
+          I grew up in Tokyo and have lived and studied across multiple countries since my late teens — an experience that shaped a strong sense of adaptability, cross-cultural fluency, and intellectual curiosity.
+        </p>
+        <p data-en="I hold a Bachelor of Commerce (Finance major) from the University of Melbourne and am completing a Bachelor of Science at the University of Auckland. I passed CFA Level I in February 2026 and am currently pursuing CFA Level II and the USCPA qualification."
+           data-ja="メルボルン大学にてBachelor of Commerce（ファイナンス専攻）を取得し、現在はオークランド大学にてBachelor of Scienceの取得を目指しています。2026年2月にCFA Level Iに合格し、現在Level IIおよびUSCPAの取得を進めています。">
+          I hold a Bachelor of Commerce (Finance major) from the University of Melbourne and am completing a Bachelor of Science at the University of Auckland. I passed CFA Level I in February 2026 and am currently pursuing CFA Level II and the USCPA qualification.
+        </p>
+        <p data-en="My interests sit at the intersection of financial markets, accounting, and technology — particularly how AI can be leveraged to drive productivity and sharpen decision-making. I am actively seeking internship opportunities in Tokyo and am available to relocate at any point in 2026."
+           data-ja="金融市場・会計・テクノロジーの交差点に関心を持ち、特にAIを活用した生産性向上や意思決定の高度化に強い関心があります。">
+          My interests sit at the intersection of financial markets, accounting, and technology — particularly how AI can be leveraged to drive productivity and sharpen decision-making. I am actively seeking internship opportunities in Tokyo and am available to relocate at any point in 2026.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section id="education">
+    <div class="section-inner">
+      <p class="section-label reveal" data-en="Education" data-ja="学歴">Education</p>
+      <div class="edu-list">
+        <div class="edu-item reveal">
+          <div>
+            <div class="edu-degree" data-en="Bachelor of Commerce — Finance" data-ja="Bachelor of Commerce — Finance">Bachelor of Commerce — Finance</div>
+            <div class="edu-school" data-en="University of Melbourne · Melbourne, Australia" data-ja="メルボルン大学・メルボルン、オーストラリア">University of Melbourne · Melbourne, Australia</div>
+          </div>
+          <div class="edu-date">Dec 2025</div>
+        </div>
+        <div class="edu-item reveal">
+          <div>
+            <div class="edu-degree" data-en="Summer Programme — Finance" data-ja="Summer Programme — Finance">Summer Programme — Finance</div>
+            <div class="edu-school" data-en="London School of Economics · London, UK" data-ja="ロンドン・スクール・オブ・エコノミクス・ロンドン、英国">London School of Economics · London, UK</div>
+          </div>
+          <div class="edu-date">Jul 2024</div>
+        </div>
+        <div class="edu-item reveal">
+          <div>
+            <div class="edu-degree" data-en="Bachelor of Science — Computer Science" data-ja="Bachelor of Science — Computer Science">Bachelor of Science — Computer Science</div>
+            <div class="edu-school" data-en="University of Auckland · Auckland, New Zealand" data-ja="オークランド大学・オークランド、ニュージーランド">University of Auckland · Auckland, New Zealand</div>
+          </div>
+          <div class="edu-date">Jan 2022 – Dec 2026</div>
+        </div>
+      </div>
+
+      <p class="section-label reveal" style="margin-top: 3rem;" data-en="Certifications" data-ja="資格">Certifications</p>
+      <div class="edu-list">
+        <div class="edu-item reveal">
+          <div>
+            <div class="edu-degree" data-en="IELTS — 6.5 Overall" data-ja="IELTS — 総合スコア 6.5">IELTS — 6.5 Overall</div>
+            <div class="edu-school" data-en="British Council" data-ja="ブリティッシュ・カウンシル">British Council</div>
+          </div>
+          <div class="edu-date">2019</div>
+        </div>
+        <div class="edu-item reveal">
+          <div>
+            <div class="edu-degree" data-en="CFA Level I — Passed" data-ja="CFA Level I — 合格">CFA Level I — Passed</div>
+            <div class="edu-school" data-en="CFA Institute · Progressing to Level II" data-ja="CFAインスティテュート・Level II 取得中">CFA Institute · Progressing to Level II</div>
+          </div>
+          <div class="edu-date">Feb 2026</div>
+        </div>
+        <div class="edu-item reveal">
+          <div>
+            <div class="edu-degree" data-en="USCPA — In Progress" data-ja="USCPA — 取得中">USCPA — In Progress</div>
+            <div class="edu-school" data-en="California State University, East Bay · Guam Jurisdiction · Online" data-ja="カリフォルニア州立大学イーストベイ校・グアム管轄・オンライン">California State University, East Bay · Guam Jurisdiction · Online</div>
+          </div>
+          <div class="edu-date" data-en="Ongoing" data-ja="進行中">Ongoing</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="experience">
+    <div class="section-inner">
+      <p class="section-label reveal" data-en="Projects" data-ja="プロジェクト">Projects</p>
+      <div class="exp-list">
+        <div class="exp-item reveal">
+          <div>
+            <div class="exp-role" data-en="Algorithmic Trading — Backtesting Report" data-ja="アルゴリズム取引 — バックテストレポート">Algorithmic Trading — Backtesting Report</div>
+            <div class="exp-org" data-en="University of Melbourne · FNCE30010 · Sem 2, 2024" data-ja="メルボルン大学 · FNCE30010 · 2024年後期">University of Melbourne · FNCE30010 · Sem 2, 2024</div>
+            <div class="exp-desc" data-en="CAPM Alpha Ranking strategy applied to Dow 30 stocks on QuantConnect. Backtested across multiple market regimes, incorporating alpha smoothing, risk parity, and Max Sharpe Ratio optimisation. Final CAGR of 15.8% with Sharpe ratio of 0.6." data-ja="QuantConnect上でDow30銘柄にCAPMアルファランキング戦略を適用。複数の市場レジームでバックテストを実施し、アルファスムージング・リスクパリティ・最大シャープレシオ最適化を組み込んだ。最終CAGRは15.8%、シャープレシオは0.6。">CAPM Alpha Ranking strategy applied to Dow 30 stocks on QuantConnect. Backtested across multiple market regimes, incorporating alpha smoothing, risk parity, and Max Sharpe Ratio optimisation. Final CAGR of 15.8% with Sharpe ratio of 0.6.</div>
+            <a href="backtesting_report.pdf" target="_blank" class="proj-link" data-en="View report →" data-ja="レポートを見る →">View report →</a>
+          </div>
+          <div class="exp-date">2024</div>
+        </div>
+        <div class="exp-item reveal">
+          <div>
+            <div class="exp-role" data-en="The Gender Dividend — Econometrics Report" data-ja="ジェンダーと教育の経済効果 — 計量経済学レポート">The Gender Dividend — Econometrics Report</div>
+            <div class="exp-org" data-en="University of Melbourne · ECOM30002 · Sem 2, 2025" data-ja="メルボルン大学 · ECOM30002 · 2025年後期">University of Melbourne · ECOM30002 · Sem 2, 2025</div>
+            <div class="exp-desc" data-en="Examined how gender causally affects marginal returns to education on household welfare in Burkina Faso using 65,015 observations. Employed OLS and 2SLS IV methods. Found females experience 27.4% larger returns to education per year than males." data-ja="65,015件のデータを用いて、ブルキナファソにおける教育の限界収益に性別が与える因果効果を分析。OLSおよび2SLS操作変数法を採用し、女性は男性より年間27.4%高い教育収益を得ることを発見。">Examined how gender causally affects marginal returns to education on household welfare in Burkina Faso using 65,015 observations. Employed OLS and 2SLS IV methods. Found females experience 27.4% larger returns to education per year than males.</div>
+            <a href="econometrics_report.pdf" target="_blank" class="proj-link" data-en="View report →" data-ja="レポートを見る →">View report →</a>
+          </div>
+          <div class="exp-date">2025</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="skills">
+    <div class="section-inner">
+      <p class="section-label reveal" data-en="Skills" data-ja="スキル">Skills</p>
+      <div class="skills-row">
+        <div class="skill-row reveal">
+          <span class="skill-cat" data-en="Finance" data-ja="ファイナンス">Finance</span>
+          <span class="skill-vals" data-en="Financial Modelling, US GAAP, Equity Valuation, Fixed Income, Derivatives, FSA" data-ja="財務モデリング、米国会計基準（US GAAP）、株式評価、債券、デリバティブ、FSA">Financial Modelling, US GAAP, Equity Valuation, Fixed Income, Derivatives, FSA</span>
+        </div>
+        <div class="skill-row reveal">
+          <span class="skill-cat" data-en="Technology" data-ja="テクノロジー">Technology</span>
+          <span class="skill-vals" data-en="Python, Machine Learning, Git, Data Analysis" data-ja="Python、機械学習、Git、データ分析">Python, Machine Learning, Git, Data Analysis</span>
+        </div>
+        <div class="skill-row reveal">
+          <span class="skill-cat" data-en="Languages" data-ja="言語">Languages</span>
+          <span class="skill-vals" data-en="English (advanced), Japanese (native)" data-ja="英語（上級）、日本語（母国語）">English (advanced), Japanese (native)</span>
+        </div>
+        <div class="skill-row reveal">
+          <span class="skill-cat" data-en="Other" data-ja="その他">Other</span>
+          <span class="skill-vals" data-en="Cross-cultural communication, Agile, Research & Analysis" data-ja="異文化コミュニケーション、アジャイル、調査・分析">Cross-cultural communication, Agile, Research & Analysis</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact">
+    <div class="section-inner">
+      <p class="section-label reveal" data-en="Contact" data-ja="連絡先">Contact</p>
+      <div class="contact-list reveal">
+        <div class="contact-row">
+          <span class="contact-cat" data-en="Email" data-ja="メール">Email</span>
+          <a href="mailto:kazu.personal.melb@gmail.com" class="contact-val">kazu.personal.melb@gmail.com</a>
+        </div>
+        <div class="contact-row">
+          <span class="contact-cat">LinkedIn</span>
+          <a href="https://www.linkedin.com/in/kazuhiko-yonekura-6377053b9" target="_blank" class="contact-val">linkedin.com/in/kazuhiko-yonekura</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <span>&copy; 2026 Kazuhiko Yonekura</span>
+    <a href="https://kazuyone.github.io">kazuyone.github.io</a>
+  </footer>
+
+  <script>
+    // Scroll reveal
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((e, i) => {
+        if (e.isIntersecting) {
+          setTimeout(() => e.target.classList.add('visible'), i * 60);
+          observer.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.08 });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    // Language toggle
+    let isJa = false;
+
+    function toggleLang() {
+      isJa = !isJa;
+      const lang = isJa ? 'ja' : 'en';
+      const label = document.getElementById('langLabel');
+      label.textContent = isJa ? 'English' : '日本語';
+
+      document.querySelectorAll('[data-en][data-ja]').forEach(el => {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(4px)';
+        el.style.transition = 'opacity 0.2s ease, transform 0.2s ease';
+        setTimeout(() => {
+          el.textContent = el.getAttribute('data-' + lang);
+          el.style.opacity = '1';
+          el.style.transform = 'translateY(0)';
+        }, 150);
+      });
+
+      document.documentElement.lang = isJa ? 'ja' : 'en';
+    }
+  </script>
+
+</body>
+</html>
