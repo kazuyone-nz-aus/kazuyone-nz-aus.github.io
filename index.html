@@ -296,9 +296,57 @@
     }
     footer a { color: inherit; text-decoration: none; }
 
+    /* HAMBURGER */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 4px;
+    }
+    .hamburger span {
+      display: block;
+      width: 22px;
+      height: 2px;
+      background: var(--black);
+      transition: all 0.25s ease;
+      border-radius: 2px;
+    }
+    .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      top: 56px; left: 0; right: 0;
+      background: rgba(255,255,255,0.98);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+      padding: 1.25rem 1.5rem;
+      z-index: 99;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a {
+      color: var(--gray);
+      text-decoration: none;
+      font-size: 0.95rem;
+      transition: color 0.15s;
+    }
+    .mobile-menu a:hover { color: var(--black); }
+    .mobile-menu .lang-toggle {
+      align-self: flex-start;
+      margin-top: 0.25rem;
+    }
+
     @media (max-width: 640px) {
       nav { padding: 0 1.25rem; }
       .nav-links { display: none; }
+      .hamburger { display: flex; }
       .hero { padding: 7rem 1.25rem 4rem; }
       section { padding: 3rem 1.25rem; }
       .edu-item, .exp-item { grid-template-columns: 1fr; }
@@ -326,7 +374,23 @@
         </button>
       </li>
     </ul>
+    <button class="hamburger" id="hamburger" onclick="toggleMenu()">
+      <span></span><span></span><span></span>
+    </button>
   </nav>
+
+  <!-- Mobile menu -->
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#about" onclick="closeMenu()" data-en="About" data-ja="自己紹介">About</a>
+    <a href="#education" onclick="closeMenu()" data-en="Education" data-ja="学歴">Education</a>
+    <a href="#experience" onclick="closeMenu()" data-en="Projects" data-ja="プロジェクト">Projects</a>
+    <a href="#skills" onclick="closeMenu()" data-en="Skills" data-ja="スキル">Skills</a>
+    <a href="#contact" onclick="closeMenu()" data-en="Contact" data-ja="連絡先">Contact</a>
+    <button class="lang-toggle" id="langToggleMobile" onclick="toggleLang()">
+      <span class="lang-icon">🌐</span>
+      <span id="langLabelMobile">日本語</span>
+    </button>
+  </div>
 
   <div class="hero">
     <h1 class="hero-name" data-en="Kazuhiko Yonekura" data-ja="米倉 和彦">Kazuhiko Yonekura</h1>
@@ -504,14 +568,26 @@
     }, { threshold: 0.08 });
     document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
+    // Hamburger menu
+    function toggleMenu() {
+      const menu = document.getElementById('mobileMenu');
+      const burger = document.getElementById('hamburger');
+      menu.classList.toggle('open');
+      burger.classList.toggle('open');
+    }
+    function closeMenu() {
+      document.getElementById('mobileMenu').classList.remove('open');
+      document.getElementById('hamburger').classList.remove('open');
+    }
+
     // Language toggle
     let isJa = false;
 
     function toggleLang() {
       isJa = !isJa;
       const lang = isJa ? 'ja' : 'en';
-      const label = document.getElementById('langLabel');
-      label.textContent = isJa ? 'English' : '日本語';
+      document.getElementById('langLabel').textContent = isJa ? 'English' : '日本語';
+      document.getElementById('langLabelMobile').textContent = isJa ? 'English' : '日本語';
 
       document.querySelectorAll('[data-en][data-ja]').forEach(el => {
         el.style.opacity = '0';
